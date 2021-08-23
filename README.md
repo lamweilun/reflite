@@ -18,6 +18,7 @@
 
 ### Usage:
 ```C++
+#include <iostream>
 #include "reflite.h" // Include this header
 
 struct S
