@@ -2,6 +2,20 @@
 - C++ header-only compile time class/struct introspection helper.
 - Compatible with C++17 and above.
 
+### My motivations for making this:
+- I was working on my own C++ game engine project and I needed a quick and easy way to setup reflection of data for my engine components. It also needs to be easily extendable to be used in a variety of systems such as serialization/deserialization and registration of GUI layouts. Existing solutions, like RTTR, are great but I just want to keep the project as lean as possible. So I gave myself a challenge and after some days of research, this is what I came up with.
+
+### Pros and Cons
+- Pros:
+  - Lightweight.
+  - Header only.
+  - No other dependencies.
+- Cons:
+  - Does not handle member functions.
+  - Does not handle inheritance.
+  - C++14 and below not supported.
+  - You tell me, there's probably a lot more.
+
 ### Usage:
 ```C++
 #include "reflite.h" // Include this header
@@ -156,17 +170,3 @@ int main()
    */
 }
 ```
-
-### My motivations for making this:
-- I was working on my own C++ game engine project and I needed a quick and easy way to setup reflection of data for my engine components. It also needs to be easily extendable to be used in a variety of systems such as serialization/deserialization and registration of GUI layouts. Existing solutions, like RTTR, are great but I just want to keep the project as lean as possible. So I gave myself a challenge and after some days of research, this is what I came up with.
-
-### Pros and Cons
-- Pros:
-  - Lightweight.
-  - Header only.
-  - No other dependencies.
-- Cons:
-  - Does not handle member functions.
-  - Does not handle inheritance.
-  - C++14 and below not supported.
-  - You tell me, there's probably a lot more.
