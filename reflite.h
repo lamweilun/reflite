@@ -175,24 +175,15 @@ namespace reflite
 	}
 }
 
-#define REFLITE_TYPE(X) \
-inline static constexpr reflite::meta_type _metaType = { #X, reflite::cx_hash(#X) };
+#define REFLITE_START(X) \
+using self = X; \
+inline static constexpr reflite::meta_type _metaType = { #X, reflite::cx_hash(#X) }; \
+inline static std::tuple _metaData = {
 
-#define REFLITE_START \
-inline static std::tuple<
-
-#define REFLITE_ADD(TYPE, MEMBER_TYPE, NAME) \
-reflite::meta_data<TYPE, MEMBER_TYPE, reflite::cx_hash(NAME)>
+#define REFLITE_ADD(MEMBER) \
+reflite::meta_data<self, decltype(self::MEMBER), reflite::cx_hash(#MEMBER)> { #MEMBER, &self::MEMBER },
 
 #define REFLITE_END \
->_metaData = 
-
-#define REFLITE_DEFINE_START {
-
-#define REFLITE_DEFINE_ADD(TYPE, MEMBER, NAME) \
-{ NAME, &TYPE::MEMBER }
-
-#define REFLITE_DEFINE_END \
 };
 
 #define REFLITE_VISIT_START(TYPE, ELEMENT) \
