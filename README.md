@@ -16,113 +16,29 @@
   - C++14 and below not supported.
   - You tell me, there's probably a lot more.
 
-### Usage:
+### Special Thanks:
+[Malody Hoe - undefinist](https://github.com/undefinist) for the help in reducing macros usage.
+
+---
+
+### Sample Usage:
 ```C++
 #include <iostream>
-#include "reflite.h" // Include this header
-
-struct S
-{
-  // Members must be public for it to be "reflected"
-  int a;
-
-  /*
-  - Reflection is achieved in 2 steps, declaration then definition.
-  - Declaration and Definition must be contiguous in order.
-  - Do not declare/define methods or members while reflecting.
-  */
-
-  // Declare your reflections
-  REFLITE_TYPE(S)
-  REFLITE_START                 // Start of declaration block
-  REFLITE_ADD(S, int, "a")      // (this_type, member_type, "name")
-  REFLITE_END                   // End of declaration block
-
-  // Define your reflections
-  REFLITE_DEFINE_START          // Start of definition block
-  REFLITE_DEFINE_ADD(S, a, "a") // (this_type, member, "same name as declaration")
-  REFLITE_DEFINE_END            // End of definition block
-};
-
-struct M
-{
-  float b;
-  char c;
-  double d;
-
-  /*
-  - For reflection of multiple members, 
-  - add a comma at the end of each "ADD" command
-
-  - Ensure that there is an equal number of declarations and definitions
-  */
-
-  // Declare your reflections
-  REFLITE_TYPE(M)
-  REFLITE_START
-  REFLITE_ADD(M, float, "b"),   // Add a comma for every additional member
-  REFLITE_ADD(M, char, "c"),
-  REFLITE_ADD(M, double, "d")   // No commas required for the last member
-  REFLITE_END
-
-  // Define your reflections
-  REFLITE_DEFINE_START
-  REFLITE_DEFINE_ADD(M, b, "b"),  // You need commas here as well
-  REFLITE_DEFINE_ADD(M, c, "c"),
-  REFLITE_DEFINE_ADD(M, d, "d")   // No commas required for the last member
-  REFLITE_DEFINE_END
-};
-
-int main
-(
-  M m{1.0f, 'e', 2.0};
-
-  // You can then iterate through a struct's reflection like so
-  // The following is not compile-time, it is still runtime generated.
-
-  // Takes in a reflected type, and you provide an "ID" for the iterated data
-  REFLITE_VISIT_START(M, memberInfo)
-  std::cout << memberInfo.name << std::endl;      // Access the reflected name
-  std::cout << m.*memberInfo.data << std::endl;   // Access the data of a certain object
-  REFLITE_VISIT_END
-
-  /*
-   This will output:
-
-   b
-   1.0
-   c
-   e
-   d
-   2.0
-   */
-)
-```
-
-### Sample demo:
-```C++
-#include <iostream>
-#include "reflite.h"
+#include "reflite.h"  // include this header
 
 struct Birthday
 {
   int day = 1, month = 1, year = 1900;
 
-  REFLITE_TYPE(Birthday)
-  REFLITE_START
-  REFLITE_ADD(Birthday, int, "day"),
-  REFLITE_ADD(Birthday, int, "month"),
-  REFLITE_ADD(Birthday, int, "year")
+  // Declare your reflections
+  REFLITE_START(Birthday)
+  REFLITE_ADD(day)
+  REFLITE_ADD(month)
+  REFLITE_ADD(year)
   REFLITE_END
-
-  REFLITE_DEFINE_START
-  REFLITE_DEFINE_ADD(Birthday, day, "day"),
-  REFLITE_DEFINE_ADD(Birthday, month, "month"),
-  REFLITE_DEFINE_ADD(Birthday, year, "year")
-  REFLITE_DEFINE_END
 };
 
-// Overloaded operator<< for the std::cout below
+// Overload the operator<< for the std::cout below
 std::ostream& operator<<(std::ostream& os, const Birthday& rhs)
 {
   return os << rhs.day << '/' << rhs.month << '/' << rhs.year;
@@ -134,18 +50,12 @@ struct Human
   const char* name;
   float height;
 
-  REFLITE_TYPE(Human)
-  REFLITE_START
-  REFLITE_ADD(Human, Birthday, "birthday"),
-  REFLITE_ADD(Human, const char*, "name"),
-  REFLITE_ADD(Human, float, "height")
+  // Declare your reflections
+  REFLITE_START(Human)
+  REFLITE_ADD(birthday)
+  REFLITE_ADD(name)
+  REFLITE_ADD(height)
   REFLITE_END
-
-  REFLITE_DEFINE_START
-  REFLITE_DEFINE_ADD(Human, birthday, "birthday"),
-  REFLITE_DEFINE_ADD(Human, name, "name"),
-  REFLITE_DEFINE_ADD(Human, height, "height")
-  REFLITE_DEFINE_END
 };
 
 int main()
@@ -159,15 +69,13 @@ int main()
   std::cout << h1.*memberInfo.data << std::endl;
   REFLITE_VISIT_END
 
-  /*
-   This will output:
-
-   birthday
-   17/6/1996
-   name
-   John
-   height
-   1.8
-   */
+  /* This will output:
+  birthday
+  17/6/1996
+  name
+  John
+  height
+  1.8
+  */
 }
 ```
