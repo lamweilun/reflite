@@ -64,12 +64,14 @@ int main()
   Human h1 {{17, 6, 1996}, "John", 1.8f};
 
   // Iterate through its reflected members
+  std::cout << REFLITE_GET_TYPE_NAME(Human) << std::endl;
   REFLITE_VISIT_START(Human, memberInfo)
   std::cout << memberInfo.name << std::endl;
   std::cout << h1.*memberInfo.data << std::endl;
   REFLITE_VISIT_END
 
-  /* This will output:
+  /* This would output
+  Human
   birthday
   17/6/1996
   name

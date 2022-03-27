@@ -5,6 +5,7 @@
 #include <functional>
 #include <variant>
 #include <array>
+#include <type_traits>
 
 namespace reflite
 {
@@ -177,6 +178,7 @@ namespace reflite
 
 #define REFLITE_START(X) \
 using self = X; \
+inline static constexpr const char* _metaName = #X; \
 inline static constexpr reflite::meta_type _metaType = { #X, reflite::cx_hash(#X) }; \
 inline static std::tuple _metaData = {
 
@@ -202,5 +204,7 @@ for (auto const& _reflite_elem : reflite::to_range(reflite::get_meta_data<TYPE>(
 			_reflite_elem \
 		); \
 	} 
+
+#define REFLITE_GET_TYPE_NAME(X) X::_metaName
 
 #endif
